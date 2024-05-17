@@ -30,9 +30,12 @@ public class Vector_Código_Intermedio {
     
     public static void main (String [] args) throws IOException
     {
+        long tiempo_inicial = System.currentTimeMillis();
+        boolean inicioPrograma = false;
         // Leer el archivo de texto línea por línea
         //try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Tokens2.txt")))
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Ejemplo6.txt")))
+
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Ejemplo6.txt")))
         {
             String linea;
             String lineaSiguiente = null;
@@ -46,311 +49,283 @@ public class Vector_Código_Intermedio {
             int apuntador2;
             String resultado = null;
             
-            while ((linea = br.readLine()) != null)
-            {
+            while ((linea = br.readLine()) != null) {
+
                 // Dividir la línea en partes
                 String[] partes = linea.split(",");
                 String palabra = partes[0];
-                
-                // Reglas de análisis léxico
-                switch (palabra)
-                {
-                    case "si":
-                        pilaDeEstatutos.push(linea);
-                        break;
-                    case "entonces":
-                        guardado = linea;
-                        while (!pilaDeOperadores.isEmpty())
-                        {
-                            pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            cintaDeVCI.add(pilaDeOperadoresTokens.pop());
+                if (inicioPrograma == false) {
+                    if (partes[1].equals("-2")) {
+                        inicioPrograma = true;
+                    }
+                } else {
+                    // Reglas de análisis léxico
+                    switch (palabra) {
+                        case "si":
+                            pilaDeEstatutos.push(linea);
+                            break;
+                        case "entonces":
+                            guardado = linea;
+                            while (!pilaDeOperadores.isEmpty()) {
+                                pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                cintaDeVCI.add(pilaDeOperadoresTokens.pop());
+                                cintaDeVCIApuntador.add(apuntador++);
+                            }
+
+                            pilaDeDirecciones.push(apuntador + 1);
+
+                            cintaDeVCI.add("└");
                             cintaDeVCIApuntador.add(apuntador++);
-                        }
-                        
-                        pilaDeDirecciones.push(apuntador + 1);
-                        
-                        cintaDeVCI.add("└");
-                        cintaDeVCIApuntador.add(apuntador++);
-                        
-                        cintaDeVCI.add(guardado);
-                        cintaDeVCIApuntador.add(apuntador++);
-                        guardado = null;
-                        break;
-                    case "sino":
-                        guardado = linea;
-                        pilaDeEstatutos.push(linea);
-                        
-                        if (!pilaDeDirecciones.isEmpty())
-                        {   
-                            apuntador2 = pilaDeDirecciones.pop();
-                            for (int i = 0; i < cintaDeVCI.size(); i++)
-                            {
-                                if (i == apuntador2)
-                                {
-                                    cintaDeVCI.set(i-1, ((apuntador + 1) + 1) + "");
-                                }
-                            }
-                        }
-                        
-                        cintaDeVCI.add("└");
-                        cintaDeVCIApuntador.add(apuntador++);
-                        
-                        pilaDeDirecciones.push(apuntador + 1);
-                        
-                        cintaDeVCI.add(guardado);
-                        cintaDeVCIApuntador.add(apuntador++);
-                        guardado = null;
-                        break;
-                    case "fin":
-                        if (!pilaDeEstatutos.isEmpty())
-                        {
-                            pilaDeEstatutos.pop();
-                        }
-                        
-                        String archivo = "C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Ejemplo6.txt";
-                        String palabraBuscada = linea;
-                        try (BufferedReader br2 = new BufferedReader(new FileReader(archivo))) 
-                        {
-                            String linea2;
-                            boolean palabraEncontrada = false;
-                            
-                            // Leemos el archivo línea por línea
-                            while ((linea2 = br2.readLine()) != null)
-                            {
-                                // Buscamos la palabra en la línea
-                                if (linea2.contains(palabraBuscada))
-                                {
-                                    palabraEncontrada = true;
-                                    // Leemos la línea siguiente si existe
-                                    lineaSiguiente = br2.readLine();
-                                    break; // Salimos del bucle una vez que encontramos la palabra
-                                }
-                            }
-                        }
-                        
-                        resultado = obtenerPrimerElementoSplit(lineaSiguiente);
-                        // Procesar la línea siguiente si es necesario
-                        if ("sino".equals(resultado))
-                        {
-                            resultado = null;
-                            break;
-                        }
-                        else if ("hasta".equals(resultado))
-                        {
-                            break;
-                        }
-                        else if (mientras != null && "mientras".equals(mientras))
-                        {
-                            if (!pilaDeDirecciones.isEmpty())
-                            {
-                                apuntador2 = pilaDeDirecciones.pop();
-                                for (int i = 0; i < cintaDeVCI.size(); i++)
-                                {
-                                    if (i == apuntador2)
-                                    {
-                                        cintaDeVCI.set(i-1, ((apuntador + 1) + 1) + "");
-                                    }
-                                }
-                            }
-                            
-                            if (!pilaDeDirecciones.isEmpty())
-                            {
-                                apuntador2 = pilaDeDirecciones.pop();
-                                cintaDeVCI.add((apuntador2 - 1) + "");
-                                cintaDeVCIApuntador.add(apuntador++);
-                            }
-                            
-                            cintaDeVCI.add("fin-mientras");
-                            cintaDeVCIApuntador.add(apuntador++);
-                            inicio = null;
-                            break;
-                        }
-                        else if(inicio != null && "inicio".equals(inicio))
-                        {
-                            if (!pilaDeDirecciones.isEmpty())
-                            {
-                                int apu = pilaDeDirecciones.pop();
-                            
-                                for (int i = 0; i < cintaDeVCI.size(); i++)
-                                {
-                                    if (i == apu)
-                                    {
-                                        if ("└".equals(cintaDeVCI.get(i-2)))
-                                        {
-                                            cintaDeVCI.set(i-2, apuntador + "");
-                                        }
-                                        else if ("└".equals(cintaDeVCI.get(i-1)))
-                                        {
-                                            cintaDeVCI.set(i-1, apuntador + "");
-                                        }
-                                    }
-                                }
-                            }
-                            inicio = null;
-                            break;
-                        }
-                        break;
-                    case "*":
-                        verificarExistencia("*", linea);
-                        break;
-                    case "/":
-                        verificarExistencia("/", linea);
-                        break;
-                    case "%":
-                        verificarExistencia("%", linea);
-                        break;
-                    case "+":
-                        verificarExistencia("+", linea);
-                        break;
-                    case "-":
-                        verificarExistencia("-", linea);
-                        break;
-                    case "<":
-                        verificarExistencia("<", linea);
-                        break;
-                    case ">":
-                        verificarExistencia(">", linea);
-                        break;
-                    case "<=":
-                        verificarExistencia("<=", linea);
-                        break;
-                    case ">=":
-                        verificarExistencia(">=", linea);
-                        break;
-                    case "==":
-                        verificarExistencia("==", linea);
-                        break;
-                    case "!=":
-                        verificarExistencia("!=", linea);
-                        break;
-                    case "not":
-                        verificarExistencia("not", linea);
-                        break;
-                    case "and":
-                        verificarExistencia("and", linea);
-                        break;
-                    case "or":
-                        verificarExistencia("or", linea);
-                        break;
-                    case "=":
-                        verificarExistencia("=", linea);
-                        break;
-                    case "repetir":
-                        pilaDeEstatutos.push(linea);
-                        pilaDeDirecciones.push(apuntador + 1);
-                        break;
-                    case "hasta":
-                        hasta = palabra;
-                        temporal = linea;
-                        inicio = null;
-                        break;
-                    case "(":
-                        pilaDeOperadores.push(palabra);
-                        pilaDePrioridad.push(0);
-                        pilaDeOperadoresTokens.push(linea);
-                        break;
-                    case ")":
-                        while(!pilaDeOperadores.isEmpty() && pilaDeOperadores.peek().equals( "("))
-                        {
-                            String t = pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            token = pilaDeOperadoresTokens.pop();
-                            if (!"(".equals(t))
-                            {
-                                cintaDeVCI.add(token);
-                                cintaDeVCIApuntador.add(apuntador++);
-                            }
-                            token = null;
-                        }
-                        
-                        if (!pilaDeOperadores.isEmpty())
-                        {
-                            pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            token = pilaDeOperadoresTokens.pop();
-                            cintaDeVCI.add(token);
-                            cintaDeVCIApuntador.add(apuntador++);
-                        }
-                        if (!pilaDeOperadores.isEmpty())
-                        {
-                            //Elimina el ( de la pila
-                            pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            pilaDeOperadoresTokens.pop();
-                        }
-                        
-                        if("hasta".equals(hasta))
-                        {
-                            if (!pilaDeDirecciones.isEmpty())
-                            {
-                                guardado = (pilaDeDirecciones.pop() - 1) + "";
-                                cintaDeVCI.add(guardado);
-                                cintaDeVCIApuntador.add(apuntador++);
-                            }
-                            hasta = null;
-                            guardado = null;
-                            
-                            if(temporal != null)
-                            {
-                                cintaDeVCI.add(temporal);
-                                cintaDeVCIApuntador.add(apuntador++);
-                                temporal = null;
-                            }
-                        }
-                        break;
-                    case "inicio":
-                        inicio = "inicio";
-                        break;
-                    case "mientras":
-                        pilaDeEstatutos.push(linea);
-                        pilaDeDirecciones.push(apuntador + 1);
-                        mientras = "mientras";
-                        break;
-                    case "hacer":
-                        while (!pilaDeOperadores.isEmpty())
-                        {
-                            pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            guardado = pilaDeOperadoresTokens.pop();
+
                             cintaDeVCI.add(guardado);
                             cintaDeVCIApuntador.add(apuntador++);
                             guardado = null;
-                        }
-                        
-                        cintaDeVCI.add("└");
-                        cintaDeVCIApuntador.add(apuntador++);
-                        
-                        pilaDeDirecciones.push(apuntador);
-                        
-                        cintaDeVCI.add(linea);
-                        cintaDeVCIApuntador.add(apuntador++);
-                        break;
-                    case ";":
-                        while (!pilaDeOperadores.isEmpty())
-                        {
-                            pilaDeOperadores.pop();
-                            pilaDePrioridad.pop();
-                            token = pilaDeOperadoresTokens.pop();
-                            cintaDeVCI.add(token);
+                            break;
+                        case "sino":
+                            guardado = linea;
+                            pilaDeEstatutos.push(linea);
+
+                            if (!pilaDeDirecciones.isEmpty()) {
+                                apuntador2 = pilaDeDirecciones.pop();
+                                for (int i = 0; i < cintaDeVCI.size(); i++) {
+                                    if (i == apuntador2) {
+                                        cintaDeVCI.set(i - 1, ((apuntador + 1) + 1) + "");
+                                    }
+                                }
+                            }
+
+                            cintaDeVCI.add("└");
                             cintaDeVCIApuntador.add(apuntador++);
-                            token = null;
-                        }
-                        break;
-                    default:
-                        cintaDeVCI.add(linea);
-                        cintaDeVCIApuntador.add(apuntador++);
-                        break;
+
+                            pilaDeDirecciones.push(apuntador + 1);
+
+                            cintaDeVCI.add(guardado);
+                            cintaDeVCIApuntador.add(apuntador++);
+                            guardado = null;
+                            break;
+                        case "fin":
+                            if (!pilaDeEstatutos.isEmpty()) {
+                                pilaDeEstatutos.pop();
+                            }
+
+                            String archivo = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Ejemplo6.txt";
+                            String palabraBuscada = linea;
+                            try (BufferedReader br2 = new BufferedReader(new FileReader(archivo))) {
+                                String linea2;
+                                boolean palabraEncontrada = false;
+
+                                // Leemos el archivo línea por línea
+                                while ((linea2 = br2.readLine()) != null) {
+                                    // Buscamos la palabra en la línea
+                                    if (linea2.contains(palabraBuscada)) {
+                                        palabraEncontrada = true;
+                                        // Leemos la línea siguiente si existe
+                                        lineaSiguiente = br2.readLine();
+                                        break; // Salimos del bucle una vez que encontramos la palabra
+                                    }
+                                }
+                            }
+
+                            resultado = obtenerPrimerElementoSplit(lineaSiguiente);
+                            // Procesar la línea siguiente si es necesario
+                            if ("sino".equals(resultado)) {
+                                resultado = null;
+                                break;
+                            } else if ("hasta".equals(resultado)) {
+                                break;
+                            } else if (mientras != null && "mientras".equals(mientras)) {
+                                if (!pilaDeDirecciones.isEmpty()) {
+                                    apuntador2 = pilaDeDirecciones.pop();
+                                    for (int i = 0; i < cintaDeVCI.size(); i++) {
+                                        if (i == apuntador2) {
+                                            cintaDeVCI.set(i - 1, ((apuntador + 1) + 1) + "");
+                                        }
+                                    }
+                                }
+
+                                if (!pilaDeDirecciones.isEmpty()) {
+                                    apuntador2 = pilaDeDirecciones.pop();
+                                    cintaDeVCI.add((apuntador2 - 1) + "");
+                                    cintaDeVCIApuntador.add(apuntador++);
+                                }
+
+                                cintaDeVCI.add("fin-mientras");
+                                cintaDeVCIApuntador.add(apuntador++);
+                                inicio = null;
+                                break;
+                            } else if (inicio != null && "inicio".equals(inicio)) {
+                                if (!pilaDeDirecciones.isEmpty()) {
+                                    int apu = pilaDeDirecciones.pop();
+
+                                    for (int i = 0; i < cintaDeVCI.size(); i++) {
+                                        if (i == apu) {
+                                            if ("└".equals(cintaDeVCI.get(i - 2))) {
+                                                cintaDeVCI.set(i - 2, apuntador + "");
+                                            } else if ("└".equals(cintaDeVCI.get(i - 1))) {
+                                                cintaDeVCI.set(i - 1, apuntador + "");
+                                            }
+                                        }
+                                    }
+                                }
+                                inicio = null;
+                                break;
+                            }
+                            break;
+                        case "*":
+                            verificarExistencia("*", linea);
+                            break;
+                        case "/":
+                            verificarExistencia("/", linea);
+                            break;
+                        case "%":
+                            verificarExistencia("%", linea);
+                            break;
+                        case "+":
+                            verificarExistencia("+", linea);
+                            break;
+                        case "-":
+                            verificarExistencia("-", linea);
+                            break;
+                        case "<":
+                            verificarExistencia("<", linea);
+                            break;
+                        case ">":
+                            verificarExistencia(">", linea);
+                            break;
+                        case "<=":
+                            verificarExistencia("<=", linea);
+                            break;
+                        case ">=":
+                            verificarExistencia(">=", linea);
+                            break;
+                        case "==":
+                            verificarExistencia("==", linea);
+                            break;
+                        case "!=":
+                            verificarExistencia("!=", linea);
+                            break;
+                        case "not":
+                            verificarExistencia("not", linea);
+                            break;
+                        case "and":
+                            verificarExistencia("and", linea);
+                            break;
+                        case "or":
+                            verificarExistencia("or", linea);
+                            break;
+                        case "=":
+                            verificarExistencia("=", linea);
+                            break;
+                        case "repetir":
+                            pilaDeEstatutos.push(linea);
+                            pilaDeDirecciones.push(apuntador + 1);
+                            break;
+                        case "hasta":
+                            hasta = palabra;
+                            temporal = linea;
+                            inicio = null;
+                            break;
+                        case "(":
+                            pilaDeOperadores.push(palabra);
+                            pilaDePrioridad.push(0);
+                            pilaDeOperadoresTokens.push(linea);
+                            break;
+                        case ")":
+                            while (!pilaDeOperadores.isEmpty() && pilaDeOperadores.peek().equals("(")) {
+                                String t = pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                token = pilaDeOperadoresTokens.pop();
+                                if (!"(".equals(t)) {
+                                    cintaDeVCI.add(token);
+                                    cintaDeVCIApuntador.add(apuntador++);
+                                }
+                                token = null;
+                            }
+
+                            if (!pilaDeOperadores.isEmpty()) {
+                                pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                token = pilaDeOperadoresTokens.pop();
+                                cintaDeVCI.add(token);
+                                cintaDeVCIApuntador.add(apuntador++);
+                            }
+                            if (!pilaDeOperadores.isEmpty()) {
+                                //Elimina el ( de la pila
+                                pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                pilaDeOperadoresTokens.pop();
+                            }
+
+                            if ("hasta".equals(hasta)) {
+                                if (!pilaDeDirecciones.isEmpty()) {
+                                    guardado = (pilaDeDirecciones.pop() - 1) + "";
+                                    cintaDeVCI.add(guardado);
+                                    cintaDeVCIApuntador.add(apuntador++);
+                                }
+                                hasta = null;
+                                guardado = null;
+
+                                if (temporal != null) {
+                                    cintaDeVCI.add(temporal);
+                                    cintaDeVCIApuntador.add(apuntador++);
+                                    temporal = null;
+                                }
+                            }
+                            break;
+                        case "inicio":
+                            inicio = "inicio";
+                            break;
+                        case "mientras":
+                            pilaDeEstatutos.push(linea);
+                            pilaDeDirecciones.push(apuntador + 1);
+                            mientras = "mientras";
+                            break;
+                        case "hacer":
+                            while (!pilaDeOperadores.isEmpty()) {
+                                pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                guardado = pilaDeOperadoresTokens.pop();
+                                cintaDeVCI.add(guardado);
+                                cintaDeVCIApuntador.add(apuntador++);
+                                guardado = null;
+                            }
+
+                            cintaDeVCI.add("└");
+                            cintaDeVCIApuntador.add(apuntador++);
+
+                            pilaDeDirecciones.push(apuntador);
+
+                            cintaDeVCI.add(linea);
+                            cintaDeVCIApuntador.add(apuntador++);
+                            break;
+                        case ";":
+                            while (!pilaDeOperadores.isEmpty()) {
+                                pilaDeOperadores.pop();
+                                pilaDePrioridad.pop();
+                                token = pilaDeOperadoresTokens.pop();
+                                cintaDeVCI.add(token);
+                                cintaDeVCIApuntador.add(apuntador++);
+                                token = null;
+                            }
+                            break;
+                        default:
+                            cintaDeVCI.add(linea);
+                            cintaDeVCIApuntador.add(apuntador++);
+                            break;
+                    }
                 }
             }
         }
         
         // Ruta del archivo donde se guardará el texto
-        String cintaVCI = "C:\\\\Users\\\\rogel\\\\OneDrive\\\\Escritorio\\\\Semestre 8\\\\Lenguajes Y Autómatas II\\\\Proyecto\\\\src\\\\Recursos\\\\Cinta de VCI.txt";
+        String cintaVCI = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Cinta de VCI.txt";
         // Guardamos los ArrayLists en el archivo de texto
         guardarArrayListsEnArchivo(cintaDeVCI, cintaDeVCIApuntador, cintaVCI);
         // Leemos y mostramos el contenido del archivo de texto
         leerArchivoYMostrarContenido(cintaVCI);
+        long tiempo_final = System.currentTimeMillis() - tiempo_inicial;
+        System.out.println("el tiempo total fue de:" + tiempo_final);
     }
     
     public static void verificarExistencia(String temporal, String token)
@@ -491,7 +466,7 @@ public class Vector_Código_Intermedio {
             for (String elemento : arrayList1)
             {
                 writer.write(elemento);
-                writer.write(" ↕ ");
+                writer.write(" \n ");
             }
             writer.newLine(); // Agregamos un salto de línea después del primer ArrayList
             
