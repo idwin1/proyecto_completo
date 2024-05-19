@@ -458,6 +458,7 @@ public class Resolucion {
                             }
                             //System.out.println(tablaSimbolos.get(0).toString());
                             break;
+                            //caso <
                         case "-31":
                             tem = pilaControl.pop();
                             tem2 = pilaControl.pop();

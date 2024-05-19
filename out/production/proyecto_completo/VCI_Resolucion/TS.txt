@@ -1,2 +1,4 @@
-x&,-54,0,Main
-sum&,-51,25,Main
+a,-54,0,Main
+s,-51,10,Main
+x,-54,10,Main
+y,-54,true,Main
