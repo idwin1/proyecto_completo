@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class Resolucion {
@@ -17,26 +18,68 @@ public class Resolucion {
         try {
             String linea;
             BufferedReader lector = new BufferedReader(new FileReader(archivoOperaciones));
+            ArrayList<String> lectura = new ArrayList<>();
+            Scanner sc = new Scanner(System.in);
             Token tem;
             Token tem2;
             Token temporal;
             Object valor = null;
             Object valor2 = null;
-            while ((linea = lector.readLine()) != null) {
-                String[] partes = linea.split(",");
-                if(partes[1].equals("-21") ||
-                        partes[1].equals("-22") ||
-                        partes[1].equals("-24") ||
-                        partes[1].equals("-25") ||
-                        partes[1].equals("-26") ||
-                        partes[1].equals("-31") ||
-                        partes[1].equals("-32") ||
-                        partes[1].equals("-33") ||
-                        partes[1].equals("-34") ||
-                        partes[1].equals("-35") ||
-                        partes[1].equals("-36") ||
-                        partes[1].equals("-41") ){
+            boolean vv;
+            int pc_aux;
+            int pc = 0;
+            while((linea = lector.readLine()) != null){
+                lectura.add(linea);
+            }
+            while ((pc < lectura.size())) {
+                String[] partes = lectura.get(pc).split(",");
+                pc++;
+                if(partes[1].equals("0") || partes[1].equals("-4") || partes[1].equals("-5") || partes[1].equals("-7") ||
+                        partes[1].equals("-10") || partes[1].equals("-16") || partes[1].equals("-17") || partes[1].equals("-21") ||
+                        partes[1].equals("-22") || partes[1].equals("-24") || partes[1].equals("-25") || partes[1].equals("-26") ||
+                        partes[1].equals("-31") || partes[1].equals("-32") || partes[1].equals("-33") || partes[1].equals("-34") ||
+                        partes[1].equals("-35") || partes[1].equals("-36") || partes[1].equals("-41") || partes[1].equals("-42") || partes[1].equals("-43")){
                     switch (partes[1]){
+
+                        case "-4":
+                            partes = lectura.get(pc).split(",");
+                            System.out.println("ingrese algo");
+                            for(int i=0;i < tablaSimbolos.size();i++){
+                                if(tablaSimbolos.get(i).getNombre().equals(partes[0])){
+                                    tablaSimbolos.get(i).setValor(sc.nextLine());
+                                }
+                            }
+                            pc++;
+                            break;
+                        case "-5":
+                            boolean entro = false;
+                            partes = lectura.get(pc).split(",");
+                            for(int i=0;i < tablaSimbolos.size();i++){
+                                if(tablaSimbolos.get(i).getNombre().equals(partes[0])){
+                                    System.out.println(tablaSimbolos.get(i).toString());
+                                    entro = true;
+                                }
+                            }
+                            if(entro == false){
+                                System.out.println(lectura.get(pc).toString());
+                            }
+                            pc++;
+                            break;
+                        case "-7":
+                        case "0":
+                            pc =Integer.parseInt(pilaControl.pop().getNombre());
+                            break;
+                        case "-10":
+                        case "-16":
+                        case "-17":
+                            pc_aux = Integer.parseInt(pilaControl.pop().getNombre());
+                            vv = Boolean.parseBoolean(pilaControl.pop().getNombre());
+                            if(vv == true){
+                                pc = pc;
+                            }else {
+                                pc = pc_aux;
+                            }
+                            break;
                         // caso *
                         case "-21":
                             tem = pilaControl.pop();
@@ -986,10 +1029,191 @@ public class Resolucion {
                             break;
                             // caso &&
                         case "-41":
+                            tem = pilaControl.pop();
+                            tem2 = pilaControl.pop();
+                            switch (tem.getToken()){
+                                case -54:
+                                case -64:
+                                    if (tem.getToken() == -54 && tem2.getToken()==-54) {
+
+                                        for(int i=0;i< tablaSimbolos.size();i++){
+                                            if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor = tablaSimbolos.get(i).getValor();
+                                            }
+                                            if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor2 = tablaSimbolos.get(i).getValor();
+                                            }
+                                        }
+                                        if(valor2.equals("true") && valor.equals("true")){
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }else {
+                                            pilaControl.add(new Token("false",-64,0,0));
+                                        }
+
+                                    }else if(tem.getToken() == -64 && tem2.getToken()==-64){
+
+                                        if(tem2.getNombre().equals("true") && tem.getNombre().equals("true")){
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }else {
+                                            pilaControl.add(new Token("false",-64,0,0));
+                                        }
+
+
+                                    } else{
+                                        if(tem.getToken() == -54){
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(tem2.getNombre().equals("true") && valor.equals("true")){
+                                                pilaControl.add(new Token("true",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }
+
+                                        }else {
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor2 = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(valor2.equals("true") && tem.getNombre().equals("true")){
+                                                pilaControl.add(new Token("true",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }
+                                        }
+                                    }
+
+                                    break;
+                            }
                             break;
+                            // caso ||
                         case "-42":
+                            tem = pilaControl.pop();
+                            tem2 = pilaControl.pop();
+                            switch (tem.getToken()){
+                                case -54:
+                                case -64:
+                                    if (tem.getToken() == -54 && tem2.getToken()==-54) {
+
+                                        for(int i=0;i< tablaSimbolos.size();i++){
+                                            if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor = tablaSimbolos.get(i).getValor();
+                                            }
+                                            if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor2 = tablaSimbolos.get(i).getValor();
+                                            }
+                                        }
+                                        if(valor2.equals("true") || valor.equals("true")){
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }else {
+                                            pilaControl.add(new Token("false",-64,0,0));
+                                        }
+
+                                    }else if(tem.getToken() == -64 && tem2.getToken()==-64){
+
+                                        if(tem2.getNombre().equals("true") || tem.getNombre().equals("true")){
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }else {
+                                            pilaControl.add(new Token("false",-64,0,0));
+                                        }
+
+
+                                    } else{
+                                        if(tem.getToken() == -54){
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(tem2.getNombre().equals("true") || valor.equals("true")){
+                                                pilaControl.add(new Token("true",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }
+
+                                        }else {
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor2 = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(valor2.equals("true") || tem.getNombre().equals("true")){
+                                                pilaControl.add(new Token("true",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }
+                                        }
+                                    }
+
+                                    break;
+                            }
                             break;
+                            // caso !
                         case "-43":
+                            tem = pilaControl.pop();
+                            tem2 = pilaControl.pop();
+                            switch (tem.getToken()){
+                                case -54:
+                                case -64:
+                                    if (tem.getToken() == -54 && tem2.getToken()==-54) {
+
+                                        for(int i=0;i< tablaSimbolos.size();i++){
+                                            if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor = tablaSimbolos.get(i).getValor();
+                                            }
+                                            if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                valor2 = tablaSimbolos.get(i).getValor();
+                                            }
+                                        }
+                                        if(valor2.equals("true") && valor.equals("true")){
+                                            pilaControl.add(new Token("false",-64,0,0));
+
+                                        }else {
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }
+
+                                    }else if(tem.getToken() == -64 && tem2.getToken()==-64){
+
+                                        if(tem2.getNombre().equals("true") && tem.getNombre().equals("true")){
+                                            pilaControl.add(new Token("false",-64,0,0));
+                                        }else {
+                                            pilaControl.add(new Token("true",-64,0,0));
+                                        }
+
+
+                                    } else{
+                                        if(tem.getToken() == -54){
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(tem2.getNombre().equals("true") && valor.equals("true")){
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("true",-64,0,0));
+
+                                            }
+
+                                        }else {
+                                            for(int i=0;i< tablaSimbolos.size();i++){
+                                                if(tem2.getNombre().equals(tablaSimbolos.get(i).getNombre())){
+                                                    valor2 = tablaSimbolos.get(i).getValor();
+                                                }
+                                            }
+                                            if(valor2.equals("true") && tem.getNombre().equals("true")){
+                                                pilaControl.add(new Token("false",-64,0,0));
+                                            }else {
+                                                pilaControl.add(new Token("true",-64,0,0));
+                                            }
+                                        }
+                                    }
+
+                                    break;
+                            }
                             break;
                     }
 

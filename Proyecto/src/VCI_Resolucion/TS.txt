@@ -1,2 +1,2 @@
-x&,-54,false,Main
-sum&,-51,true,Main
+x&,-54,0,Main
+sum&,-51,25,Main
