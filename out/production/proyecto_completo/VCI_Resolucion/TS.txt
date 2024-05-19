@@ -1,2 +1,2 @@
-x&,-52,2,Main
-sum&,-52,25,Main
+x&,-53,1,Main
+sum&,-53,2,Main

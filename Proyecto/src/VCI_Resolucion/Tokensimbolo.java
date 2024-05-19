@@ -5,7 +5,7 @@ public class Tokensimbolo {
     private int Token;
     private Object valor;
 
-    public Tokensimbolo(String nombre, int token, int valor) {
+    public Tokensimbolo(String nombre, int token, Object valor) {
         this.nombre = nombre;
         this.Token = token;
         this.valor = valor;
