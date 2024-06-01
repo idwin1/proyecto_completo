@@ -1,19 +1,20 @@
 package VCI_Resolucion;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class Resolucion {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String archivoVariables = "Proyecto/src/VCI_Resolucion/TS.txt"; // Nombre del archivo TXT de variables
         String archivoOperaciones = "Proyecto/src/VCI_Resolucion/CV.txt"; // Nombre del archivo TXT de operaciones
+
         Stack<Token> pilaControl = new Stack<>();
         ArrayList<Tokensimbolo> tablaSimbolos= new ArrayList<>();
         tablaSimbolos=lecturaDeSimbolos(archivoVariables);
+
 
         try {
             String linea;
@@ -34,13 +35,16 @@ public class Resolucion {
             while ((pc < lectura.size())) {
                 String[] partes = lectura.get(pc).split(",");
                 pc++;
-                if(partes[1].equals("0") || partes[1].equals("-4") || partes[1].equals("-5") || partes[1].equals("-7") ||
+                if(partes[1].equals("null") ||partes[1].equals("0") || partes[1].equals("-4") || partes[1].equals("-5") || partes[1].equals("-7") ||
                         partes[1].equals("-10") || partes[1].equals("-16") || partes[1].equals("-17") || partes[1].equals("-21") ||
                         partes[1].equals("-22") || partes[1].equals("-24") || partes[1].equals("-25") || partes[1].equals("-26") ||
                         partes[1].equals("-31") || partes[1].equals("-32") || partes[1].equals("-33") || partes[1].equals("-34") ||
                         partes[1].equals("-35") || partes[1].equals("-36") || partes[1].equals("-41") || partes[1].equals("-42") || partes[1].equals("-43")){
                     switch (partes[1]){
-
+                        // este case se puede omitir
+                        case "null":
+                            pilaControl.add(new Token(partes[0], 0, 0, 0));
+                            break;
                         case "-4":
                             partes = lectura.get(pc).split(",");
                             System.out.println("ingrese algo");
@@ -56,12 +60,13 @@ public class Resolucion {
                             partes = lectura.get(pc).split(",");
                             for(int i=0;i < tablaSimbolos.size();i++){
                                 if(tablaSimbolos.get(i).getNombre().equals(partes[0])){
-                                    System.out.println(tablaSimbolos.get(i).toString());
+                                    System.out.println(tablaSimbolos.get(i).getValor());
                                     entro = true;
                                 }
                             }
                             if(entro == false){
-                                System.out.println(lectura.get(pc).toString());
+                                partes = lectura.get(pc).split(",");
+                                System.out.println(partes[2]);
                             }
                             pc++;
                             break;
@@ -454,6 +459,7 @@ public class Resolucion {
                             for(int i=0;i< tablaSimbolos.size();i++){
                                 if(guardar.getNombre().equals(tablaSimbolos.get(i).getNombre())){
                                     tablaSimbolos.get(i).setValor((tem.getNombre()));
+                                    //System.out.println("enteo: "+ tem.getNombre());
                                 }
                             }
                             //System.out.println(tablaSimbolos.get(0).toString());
@@ -1224,13 +1230,33 @@ public class Resolucion {
             }
         }catch (IOException e){
             System.out.println("error");
+        }catch (ArithmeticException e){
+            System.out.println("no se puede hacer la divicion entre 0");
         }
 
-
+        System.out.println("\nimpresion de la tabla de simbolos");
         for(int i=0; i < tablaSimbolos.size();i++){
             System.out.println(tablaSimbolos.get(i).toString());
         }
+
+
+        sobreescribirArchivoSimbolos(tablaSimbolos);
+
+
     }
+
+    public static void sobreescribirArchivoSimbolos(ArrayList<Tokensimbolo> simbolos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\VCI_Resolucion\\TS.txt"))) {
+            for (Tokensimbolo simbolo : simbolos) {
+                bw.write(simbolo.getNombre() + "," + simbolo.getToken() + "," + simbolo.getValor() + ","
+                        + "Main");
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static ArrayList<Tokensimbolo> lecturaDeSimbolos(String tbSimbolos) {
         ArrayList<Tokensimbolo> arreglo = new ArrayList<>();
@@ -1241,9 +1267,11 @@ public class Resolucion {
                 String[] partes = linea.split(",");
                 arreglo.add(new Tokensimbolo(partes[0], Integer.parseInt(partes[1]),partes[2]));
             }
+            lector.close();
         } catch (IOException e) {
             System.out.println("error de lectura");
         }
+
         return arreglo;
     }
 }

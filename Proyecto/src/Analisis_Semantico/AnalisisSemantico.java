@@ -21,10 +21,10 @@ public class AnalisisSemantico {
     public static void main (String [] args) throws IOException
     {
         // declara los archivos de entrada y de salida
-        String archivoTokens = "C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Tokens.txt";
-        String archivoSimbolos = "C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Simbolos.txt";
-        String archivoDirecciones = "C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Direcciones.txt";
-        String archivoNuevoTokens = "C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Tokens2.txt";
+        String archivoTokens = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Tabla de Tokens.txt";
+        String archivoSimbolos = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Tabla de Simbolos.txt";
+        String archivoDirecciones = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Tabla de Direcciones.txt";
+        String archivoNuevoTokens = "C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Tabla de Tokens2.txt";
         String valor = null;
         
         // crea la lectura y escritura de los archivos

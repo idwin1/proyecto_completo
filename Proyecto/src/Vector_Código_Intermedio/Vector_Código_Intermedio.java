@@ -35,7 +35,7 @@ public class Vector_Código_Intermedio {
         // Leer el archivo de texto línea por línea
         //try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\rogel\\OneDrive\\Escritorio\\Semestre 8\\Lenguajes Y Autómatas II\\Proyecto\\src\\Recursos\\Tabla de Tokens2.txt")))
 
-        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Recursos\\Ejemplo6.txt")))
+        try (BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Asus TUF\\Desktop\\a\\Automatas-2\\proyecto_completo\\Proyecto\\src\\Vector_Código_Intermedio\\Prueba.txt")))
         {
             String linea;
             String lineaSiguiente = null;

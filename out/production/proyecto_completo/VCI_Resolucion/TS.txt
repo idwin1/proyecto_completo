@@ -1,4 +1,5 @@
-a,-54,0,Main
-s,-51,10,Main
-x,-54,10,Main
-y,-54,true,Main
+numeroA&,-51,0,Main
+numeroB&,-51,0,Main
+resultado%,-52,0,Main
+mensaje$,-53,null,Main
+condicion#,-54,true,Main

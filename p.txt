@@ -1,0 +1,9 @@
+cent,-54,true,Main
+b,-51,10,Main
+s,-51,32,Main
+x,-51,10,Main
+y,-54,false,Main
+m,-51,12,Main
+a,-51,60,Main
+c,-54,false,Main
+sum&,-51,1,Main
